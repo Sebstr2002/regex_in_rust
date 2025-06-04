@@ -1,3 +1,4 @@
+#[derive(Debug, Clone, PartialEq)]
 pub enum RegexAst {
     Dot,
     Literal(char),
