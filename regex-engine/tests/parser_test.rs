@@ -47,6 +47,41 @@ fn parses_dot_and_star() {
 }
 
 #[test]
+fn parses_group_with_qmark() {
+    let ast = parse("(ab)?").unwrap();
+    assert_eq!(
+        ast,
+        RegexAst::Qmark(Box::new(RegexAst::Concat(
+            Box::new(RegexAst::Literal('a')),
+            Box::new(RegexAst::Literal('b')),
+        )))
+    );
+}
+
+#[test]
+fn parses_dot_and_qmark() {
+    let ast = parse(".?").unwrap();
+    assert_eq!(ast, RegexAst::Qmark(Box::new(RegexAst::Dot)));
+}
+
+#[test]
+fn parses_group_with_plus() {
+    let ast = parse("(ab)+").unwrap();
+    assert_eq!(
+        ast,
+        RegexAst::Plus(Box::new(RegexAst::Concat(
+            Box::new(RegexAst::Literal('a')),
+            Box::new(RegexAst::Literal('b')),
+        )))
+    );
+}
+
+#[test]
+fn parses_dot_and_plus() {
+    let ast = parse(".+").unwrap();
+    assert_eq!(ast, RegexAst::Plus(Box::new(RegexAst::Dot)));
+}
+#[test]
 fn handles_unexpected_char() {
     let err = parse("*").unwrap_err();
     assert!(matches!(err, ParseError::UnexpectedChar('*')));
@@ -63,3 +98,4 @@ fn handles_empty_alternation() {
     let err = parse("a|").unwrap_err();
     assert!(matches!(err, ParseError::UnexpectedEnd));
 }
+

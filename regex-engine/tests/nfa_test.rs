@@ -43,6 +43,23 @@ fn builds_kleene_star_nfa() {
 }
 
 #[test]
+fn builds_qmark_nfa() {
+    let ast = parse("a?").unwrap();
+    let nfa = from_ast(&ast);
+
+    let epsilon_count = nfa
+        .states
+        .iter()
+        .flat_map(|s| &s.transitions)
+        .filter(|t| matches!(t, Transition::Epsilon(_)))
+        .count();
+
+    assert!(
+        epsilon_count >= 2,
+        "Expected at least 3 ε-transitions for star"
+    );
+}
+#[test]
 fn builds_dot_nfa() {
     let ast = parse(".").unwrap();
     let nfa = from_ast(&ast);

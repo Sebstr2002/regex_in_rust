@@ -84,6 +84,14 @@ impl<'a> Parser<'a> {
             self.bump();
             atom = RegexAst::KleeneStar(Box::new(atom));
         }
+        while self.current == Some('?') {
+            self.bump();
+            atom = RegexAst::Qmark(Box::new(atom));
+        }
+        while self.current == Some('+') {
+            self.bump();
+            atom = RegexAst::Plus(Box::new(atom));
+        }
         Ok(atom)
     }
     // ends at highest order atom so a literal or a .
@@ -114,5 +122,5 @@ impl<'a> Parser<'a> {
 }
 
 fn is_metachar(c: char) -> bool {
-    matches!(c, '*' | '(' | ')' | '|')
+    matches!(c, '*' | '(' | ')' | '|' | '+' | '?')
 }

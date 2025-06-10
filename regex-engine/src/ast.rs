@@ -5,4 +5,6 @@ pub enum RegexAst {
     Concat(Box<RegexAst>, Box<RegexAst>),
     Alternate(Box<RegexAst>, Box<RegexAst>),
     KleeneStar(Box<RegexAst>),
+    Plus(Box<RegexAst>),
+    Qmark(Box<RegexAst>),
 }

@@ -69,6 +69,28 @@ impl NfaBuilder {
 
                 nfa::NfaFragment { start: s, accept }
             }
+            RegexAst::Plus(a) => {
+                let s = self.add_state();
+                let frag = self.build(a);
+                let accept = self.add_state();
+
+                self.link(s, nfa::Transition::Epsilon(frag.start));
+                self.link(frag.accept, nfa::Transition::Epsilon(frag.start));
+                self.link(frag.accept, nfa::Transition::Epsilon(accept));
+
+                nfa::NfaFragment { start: s, accept }
+            }
+            RegexAst::Qmark(a) => {
+                let s = self.add_state();
+                let frag = self.build(a);
+                let accept = self.add_state();
+
+                self.link(s, nfa::Transition::Epsilon(frag.start));
+                self.link(s, nfa::Transition::Epsilon(accept));
+                self.link(frag.accept, nfa::Transition::Epsilon(accept));
+
+                nfa::NfaFragment { start: s, accept }
+            }
         }
     }
 

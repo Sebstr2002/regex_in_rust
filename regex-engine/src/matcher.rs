@@ -1,5 +1,5 @@
 use crate::nfa::{NFA, Transition};
-use std::{collections::HashSet, thread::current};
+use std::collections::HashSet;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Match {

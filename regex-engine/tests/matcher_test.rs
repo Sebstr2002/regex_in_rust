@@ -10,6 +10,30 @@ fn test_greedy_find() {
 }
 
 #[test]
+fn qmark_find() {
+    let ast = parse("(ab)?").unwrap();
+    let nfa = from_ast(&ast);
+    let input = "ab";
+
+    assert_eq!(
+        nfa.find_all(input),
+        vec![Match { start: 0, end: 2 }, Match { start: 2, end: 2 },]
+    );
+}
+
+#[test]
+fn plus_find() {
+    let ast = parse("(ab)+").unwrap();
+    let nfa = from_ast(&ast);
+    let input = "ab abab";
+
+    assert_eq!(
+        nfa.find_all(input),
+        vec![Match { start: 0, end: 2 }, Match { start: 3, end: 7 },]
+    );
+}
+
+#[test]
 fn test_find_all() {
     let ast = parse("ab").unwrap();
     let nfa = from_ast(&ast);
