@@ -17,6 +17,12 @@ fn parses_literal_sequence() {
 }
 
 #[test]
+fn parses_escape() {
+    let ast = parse("/*").unwrap();
+    assert_eq!(ast, RegexAst::Literal('*'));
+}
+
+#[test]
 fn parses_alternation() {
     let ast = parse("a|b").unwrap();
     assert_eq!(
@@ -98,4 +104,3 @@ fn handles_empty_alternation() {
     let err = parse("a|").unwrap_err();
     assert!(matches!(err, ParseError::UnexpectedEnd));
 }
-

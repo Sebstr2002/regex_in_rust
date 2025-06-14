@@ -97,6 +97,15 @@ impl<'a> Parser<'a> {
     // ends at highest order atom so a literal or a .
     fn parse_atom(&mut self) -> Result<RegexAst, ParseError> {
         match self.current {
+            Some('/') => {
+                self.bump();
+                if let Some(escaped) = self.current {
+                    self.bump();
+                    return Ok(RegexAst::Literal(escaped));
+                } else {
+                    return Err(ParseError::UnexpectedEnd);
+                }
+            }
             Some('(') => {
                 // signals a start of subexpression
                 self.bump();

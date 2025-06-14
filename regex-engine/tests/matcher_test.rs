@@ -34,6 +34,15 @@ fn plus_find() {
 }
 
 #[test]
+fn find_escaped() {
+    let ast = parse("a/*").unwrap();
+    let nfa = from_ast(&ast);
+    let input = "a*";
+
+    assert_eq!(nfa.find_all(input), vec![Match { start: 0, end: 2 }]);
+}
+
+#[test]
 fn test_find_all() {
     let ast = parse("ab").unwrap();
     let nfa = from_ast(&ast);
